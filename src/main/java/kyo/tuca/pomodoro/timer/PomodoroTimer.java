@@ -2,6 +2,7 @@ package kyo.tuca.pomodoro.timer;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 
@@ -73,7 +74,7 @@ public class PomodoroTimer {
         Text message = (isTaskActive) ? Text.of("End Focus") : Text.of("End Pause");
         ServerPlayerEntity timedPlayer = server.getPlayerManager().getPlayer(player);
         if(timedPlayer == null) return; //TODO
-        timedPlayer.playSound(SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(), 1.0f, 1.0f);
+        timedPlayer.playSoundToPlayer(SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(), SoundCategory.MASTER, 1.0f, 1.0f);
         timedPlayer.sendMessage(message);
     }
 
