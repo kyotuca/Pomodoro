@@ -7,7 +7,11 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.text.Text;
 
 import java.time.Duration;
+import java.util.Arrays;
 
+/**
+ * Defines a duration argument as a command argument
+ */
 public class DurationArgumentType implements ArgumentType<Duration> {
     public static final SimpleCommandExceptionType DURATION_CONVERSION_EXCEPTION =
             new SimpleCommandExceptionType(Text.of("Invalid Arguments for duration"));
