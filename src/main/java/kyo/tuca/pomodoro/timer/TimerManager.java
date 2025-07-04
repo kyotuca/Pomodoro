@@ -1,11 +1,15 @@
 package kyo.tuca.pomodoro.timer;
 
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * manages all the timers, passing ticks and removing them
+ */
 public class TimerManager {
     private static final List<PomodoroTimer> timers = new ArrayList<>();
 
@@ -18,6 +22,10 @@ public class TimerManager {
 
     }
 
+    /**
+     * removes a timer
+     * @param playerID
+     */
     public static void removeTimer(UUID playerID){
         if(timers.removeIf(timer -> timer.getPlayer().equals(playerID))){
             //TODO timer removed
