@@ -41,4 +41,13 @@ public class TimerManager {
         }
     }
 
+    /**
+     * clears timers if a player leaves
+     */
+    private void cleanSub(){
+        ServerPlayerEvents.LEAVE.register((player) -> {
+            timers.removeIf(timer -> timer.getPlayer().equals(player.getUuid()));
+        });
+    }
+
 }
