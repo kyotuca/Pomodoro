@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "pomodoro",
+  "version": "${version}",
+  "name": "pomodoro",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "AGPL-3.0",
+  "icon": "assets/pomodoro/icon.png",
+  "entrypoints": {
+    "fabric-datagen": [
+      "kyo.tuca.pomodoro.client.PomodoroDataGenerator"
+    ],
+    "main": [
+      "kyo.tuca.pomodoro.Pomodoro"
+    ]
+  },
+  "mixins": [
+    "pomodoro.mixins.json",
+    {
+      "config": "pomodoro.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
