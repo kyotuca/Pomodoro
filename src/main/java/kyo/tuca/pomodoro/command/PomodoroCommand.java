@@ -24,6 +24,8 @@ public class PomodoroCommand {
                                 CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(
                 CommandManager.literal("pomodoro")
+                        .then(CommandManager.literal("stop")
+                                .executes(PomodoroCommand::stopTimer))
                         .then(CommandManager.argument("task time", new DurationArgumentType())
                                 .then(CommandManager.argument("pause time", new DurationArgumentType())
                                         .executes(PomodoroCommand::startTimer))));
@@ -41,6 +43,17 @@ public class PomodoroCommand {
                 context.getArgument("task time", Duration.class).getSeconds(),
                 context.getArgument("pause time", Duration.class).getSeconds());
         context.getSource().sendFeedback(()-> Text.literal("Pomodoro timer started"), false);
+        return 0;
+    }
+
+    public  static int stopTimer(CommandContext<ServerCommandSource> context){
+        ServerPlayerEntity player = context.getSource().getPlayer();
+        if(player == null) {
+            context.getSource().sendFeedback(() -> Text.literal("Command not valid, player not found"), false);
+            return -1;
+        }
+        TimerManager.removeTimer(player.getUuid());
+        context.getSource().sendFeedback(() -> Text.literal("Pomodoro terminated successfully"), false);
         return 0;
     }
 
