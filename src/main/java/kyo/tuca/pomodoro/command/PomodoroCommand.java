@@ -16,6 +16,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.time.Duration;
 
+/**
+ * Contains the logic of the /pomodoro command, including registration
+ */
 public class PomodoroCommand {
     public static final Logger LOGGER = LogManager.getLogger(PomodoroCommand.class);
 

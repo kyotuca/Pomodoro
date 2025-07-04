@@ -7,6 +7,10 @@ import net.minecraft.text.Text;
 
 import java.util.UUID;
 
+/**
+ * A single timer, with a user associated.
+ * It manages the internal state and the timers
+ */
 public class PomodoroTimer {
     private final UUID player;
     private final long taskTime;
@@ -21,6 +25,14 @@ public class PomodoroTimer {
         this.taskTime = taskTime * 20;
         this.pauseTime = pauseTime * 20;
         this.isTaskActive = true;
+    }
+
+    public PomodoroTimer(UUID playerID){
+        this.player = playerID;
+        this.taskTime = 15 * 60 * 20;
+        this.pauseTime = 5 * 60 * 20;
+        this.isTaskActive = true;
+        this.timeLeft = taskTime;
     }
 
     /**
@@ -39,6 +51,9 @@ public class PomodoroTimer {
         return player;
     }
 
+    /**
+     * Swap the state, moving from task to pause and vice versa
+     */
     private void changeTask(){
         if(isTaskActive){
             timeLeft = pauseTime;
@@ -48,8 +63,12 @@ public class PomodoroTimer {
         isTaskActive = !isTaskActive;
     }
 
+    /**
+     * Sends a notification
+     * @param server
+     */
     private void notifyTaskEnd(MinecraftServer server){
-        Text message = (isTaskActive) ? Text.of("Fine Pomodoro") : Text.of("Fine Pausa");
+        Text message = (isTaskActive) ? Text.of("End Focus") : Text.of("End Pause");
         ServerPlayerEntity timedPlayer = server.getPlayerManager().getPlayer(player);
         if(timedPlayer == null) return; //TODO
         timedPlayer.playSound(SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(), 1.0f, 1.0f);
