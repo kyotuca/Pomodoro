@@ -19,7 +19,7 @@ public class PomodoroTimer {
     private final int tickPerSeconds = 20;
     private long timeLeft;
     private boolean isTaskActive; //true if it's a task, false if it's a pause
-    private boolean isTickable;
+    private boolean tickable;
 
     public PomodoroTimer(UUID playerID, long taskTime, long pauseTime){
         this.player = playerID;
@@ -27,7 +27,7 @@ public class PomodoroTimer {
         this.taskTime = taskTime * 20;
         this.pauseTime = pauseTime * 20;
         this.isTaskActive = true;
-        this.isTickable = true;
+        this.tickable = true;
     }
 
     public PomodoroTimer(UUID playerID){
@@ -36,7 +36,7 @@ public class PomodoroTimer {
         this.pauseTime = 5 * 60 * 20;
         this.isTaskActive = true;
         this.timeLeft = taskTime;
-        this.isTickable = true;
+        this.tickable = true;
     }
 
     /**
@@ -80,7 +80,11 @@ public class PomodoroTimer {
     }
 
     public boolean isTickable(){
-        return isTickable;
+        return tickable;
+    }
+
+    public void setTickable(boolean b){
+        tickable = b;
     }
 
 }
