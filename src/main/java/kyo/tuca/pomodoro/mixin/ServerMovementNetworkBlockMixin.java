@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerPosition;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.listener.ServerPlayPacketListener;
 import net.minecraft.network.listener.TickablePacketListener;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.network.state.PlayStateFactories;
 import net.minecraft.server.MinecraftServer;
@@ -31,16 +32,11 @@ public abstract class ServerMovementNetworkBlockMixin extends ServerCommonNetwor
     }
 
     @Inject(method = "onPlayerMove(Lnet/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket;)V", at = @At("HEAD"), cancellable = true)
-    private void cancelPacket(CallbackInfo ci){
-        if(TimerManager.contains(player.getUuid())){
+    private void cancelPacket(PlayerMoveC2SPacket packet, CallbackInfo ci){
+        if(TimerManager.taskActive(player.getUuid())){
             ci.cancel();
 
-            player.networkHandler.sendPacket(
-                    new PlayerPositionLookS2CPacket(
-                            0,
-                            new PlayerPosition(player.getPos(), player.getMovement(), player.getYaw(), player.getPitch()),
-                            Collections.emptySet()
-                    ));
+            player.networkHandler.requestTeleport(player.getX(), player.getY(), player.getZ(), packet.getYaw(player.getYaw()), packet.getPitch(player.getPitch()));
         }
     }
 }

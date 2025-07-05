@@ -87,4 +87,12 @@ public class PomodoroTimer {
         tickable = b;
     }
 
+    /**
+     * get the current state
+     * @return true if it's running a task, false otherwise
+     */
+    public boolean getState(){
+        return isTaskActive;
+    }
+
 }

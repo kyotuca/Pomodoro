@@ -64,8 +64,13 @@ public class TimerManager {
      * @param player the UUID of the player to check
      * @return whether a player has an active timer
      */
-    public static boolean contains(UUID player){
-        return timers.stream().anyMatch(timer -> player == timer.getPlayer());
+    public static boolean taskActive(UUID player){
+        for(PomodoroTimer timer : timers){
+            if(timer.getPlayer() == player && timer.isTickable() && timer.getState()){
+                return true;
+            }
+        }
+        return false;
     }
 
 }
