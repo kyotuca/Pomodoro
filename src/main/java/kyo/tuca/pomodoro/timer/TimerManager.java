@@ -1,5 +1,6 @@
 package kyo.tuca.pomodoro.timer;
 
+import kyo.tuca.pomodoro.util.TimerOperationStatus;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.minecraft.server.MinecraftServer;
 
@@ -13,13 +14,21 @@ import java.util.UUID;
 public class TimerManager {
     private static final List<PomodoroTimer> timers = new ArrayList<>();
 
-    public static void addTimer(UUID playerID, long taskLength, long pauseLength){
+    public static TimerOperationStatus addTimer(UUID playerID, long taskLength, long pauseLength){
         if(timers.stream().anyMatch(timer -> playerID == timer.getPlayer())){
             //TODO  "you already have a timer running"
-            return;
+            return TimerOperationStatus.TIMER_EXISTS;
         }
         timers.add(new PomodoroTimer(playerID, taskLength, pauseLength));
+        return TimerOperationStatus.OK;
+    }
 
+    public static TimerOperationStatus addDefaultTimer(UUID playerID){
+        if(timers.stream().anyMatch(timer -> playerID == timer.getPlayer())){
+            return TimerOperationStatus.TIMER_EXISTS;
+        }
+        timers.add(new PomodoroTimer(playerID));
+        return TimerOperationStatus.OK;
     }
 
     /**
