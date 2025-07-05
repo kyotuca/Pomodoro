@@ -59,4 +59,13 @@ public class TimerManager {
         });
     }
 
+    /**
+     *
+     * @param player the UUID of the player to check
+     * @return whether a player has an active timer
+     */
+    public static boolean contains(UUID player){
+        return timers.stream().anyMatch(timer -> player == timer.getPlayer());
+    }
+
 }

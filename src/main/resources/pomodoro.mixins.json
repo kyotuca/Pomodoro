@@ -4,6 +4,7 @@
   "package": "kyo.tuca.pomodoro.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "ServerMovementNetworkBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1
