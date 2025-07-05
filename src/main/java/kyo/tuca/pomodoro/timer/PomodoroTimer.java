@@ -36,6 +36,7 @@ public class PomodoroTimer {
         this.pauseTime = 5 * 60 * 20;
         this.isTaskActive = true;
         this.timeLeft = taskTime;
+        this.isTickable = true;
     }
 
     /**
