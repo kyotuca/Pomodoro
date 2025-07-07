@@ -30,11 +30,11 @@ public class DurationArgumentType implements ArgumentType<Duration> {
         try {
             duration = switch (timings.length) {
                 case 1 -> Duration.ofSeconds(Integer.parseInt(timings[0]));
-                case 2 -> Duration.ofMinutes(Integer.parseInt(timings[1]))
-                        .plusSeconds(Integer.parseInt(timings[0]));
-                case 3 -> Duration.ofHours(Integer.parseInt(timings[2]))
+                case 2 -> Duration.ofMinutes(Integer.parseInt(timings[0]))
+                        .plusSeconds(Integer.parseInt(timings[1]));
+                case 3 -> Duration.ofHours(Integer.parseInt(timings[0]))
                         .plusMinutes(Integer.parseInt(timings[1]))
-                        .plusSeconds(Integer.parseInt(timings[0]));
+                        .plusSeconds(Integer.parseInt(timings[2]));
                 default -> throw DURATION_CONVERSION_EXCEPTION.create();
             };
         } catch (NumberFormatException e){
