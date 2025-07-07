@@ -13,11 +13,16 @@ import java.util.UUID;
  */
 public class TimerManager {
     private static final List<PomodoroTimer> timers = new ArrayList<>();
+    private static boolean hasAnyTimer = false;
 
     public static TimerOperationStatus addTimer(UUID playerID, long taskLength, long pauseLength){
         if(timers.stream().anyMatch(timer -> playerID == timer.getPlayer())){
             //TODO  "you already have a timer running"
             return TimerOperationStatus.TIMER_EXISTS;
+        }
+        if(!hasAnyTimer) {
+            hasAnyTimer = true;
+            cleanSub();
         }
         timers.add(new PomodoroTimer(playerID, taskLength, pauseLength));
         return TimerOperationStatus.OK;
@@ -42,6 +47,7 @@ public class TimerManager {
         else {
             //TODO you don't have a timer
         }
+        if(timers.isEmpty()) hasAnyTimer = false;
     }
 
     public static void tick(MinecraftServer server){
@@ -53,7 +59,7 @@ public class TimerManager {
     /**
      * clears timers if a player leaves
      */
-    private void cleanSub(){
+    private static void cleanSub(){
         ServerPlayerEvents.LEAVE.register((player) -> {
             timers.removeIf(timer -> timer.getPlayer().equals(player.getUuid()));
         });
@@ -66,7 +72,7 @@ public class TimerManager {
      */
     public static boolean taskActive(UUID player){
         for(PomodoroTimer timer : timers){
-            if(timer.getPlayer() == player && timer.isTickable() && timer.getState()){
+            if(timer.getPlayer() == player && timer.isTickable() && timer.isTaskActive()){
                 return true;
             }
         }
