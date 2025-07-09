@@ -7,6 +7,8 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.OptionalLong;
 import java.util.UUID;
 
@@ -29,9 +31,9 @@ public class PomodoroTimer {
 
     public PomodoroTimer(UUID playerID, long taskTime, long pauseTime){
         this.player = playerID;
-        this.timeLeft = taskTime * 20;
-        this.activityTime = taskTime * 20;
-        this.shortPauseTime = pauseTime * 20;
+        this.timeLeft = taskTime * tickPerSeconds;
+        this.activityTime = taskTime * tickPerSeconds;
+        this.shortPauseTime = pauseTime * tickPerSeconds;
         this.loopCounter = 0;
         this.tickable = true;
         longPauseTime = OptionalLong.empty();
@@ -39,13 +41,15 @@ public class PomodoroTimer {
     }
 
     public PomodoroTimer(UUID playerID){
+        long defaultLongPauseTime = Duration.of(15, ChronoUnit.MINUTES).getSeconds() * tickPerSeconds;
+
         this.player = playerID;
-        this.activityTime = 15 * 60 * 20;
-        this.shortPauseTime = 5 * 60 * 20;
+        this.activityTime = Duration.of(25, ChronoUnit.MINUTES).getSeconds() * tickPerSeconds;
+        this.shortPauseTime = Duration.of(5, ChronoUnit.MINUTES).getSeconds() * tickPerSeconds;
+        this.longPauseTime = OptionalLong.of(defaultLongPauseTime);
         this.loopCounter = 0;
         this.timeLeft = activityTime;
         this.tickable = true;
-        longPauseTime = OptionalLong.empty();
         currentTask = TaskType.ACTIVITY;
     }
 
