@@ -50,7 +50,7 @@ public class TimerManager {
         if(timers.isEmpty()) hasAnyTimer = false;
     }
 
-    public static void tick(MinecraftServer server){
+    public static void tick(){
         for(PomodoroTimer timer : timers){
             if(timer.isTickable()) timer.tick();
         }
