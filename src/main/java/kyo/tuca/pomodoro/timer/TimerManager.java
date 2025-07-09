@@ -52,7 +52,7 @@ public class TimerManager {
 
     public static void tick(MinecraftServer server){
         for(PomodoroTimer timer : timers){
-            if(timer.isTickable()) timer.tick();
+            timer.tick();
         }
     }
 

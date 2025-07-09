@@ -1,17 +1,20 @@
 package kyo.tuca.pomodoro.timer;
 
 import kyo.tuca.pomodoro.timer.event.TimerEndCallback;
+import net.minecraft.server.MinecraftServer;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TimerManagerTest {
+    MinecraftServer server = Mockito.mock();
 
     void tick(long seconds){
         for(int i = 0; i < seconds * 20; i++){
-            TimerManager.tick();
+            TimerManager.tick(server);
         }
     }
 

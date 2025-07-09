@@ -63,6 +63,7 @@ public class PomodoroTimer {
      * ticks a timer and notifies updates
      */
     public void tick(){
+        if(!tickable) return;
         timeLeft--;
         if(timeLeft<= 0){
             changeTask();
