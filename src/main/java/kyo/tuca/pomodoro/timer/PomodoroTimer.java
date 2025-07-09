@@ -7,6 +7,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 
+import java.util.OptionalLong;
 import java.util.UUID;
 
 /**
@@ -18,13 +19,13 @@ public class PomodoroTimer {
     private final UUID player;
     private final long activityTime;
     private final long shortPauseTime;
-    private final long longPauseTime = 15 * 60 * tickPerSeconds;
+    private OptionalLong longPauseTime;
 
     private long timeLeft;
     private boolean tickable;
-    private TaskType currentTask;
     private int loopCounter;
     private int loopIndexForLongPause;
+    private TaskType currentTask;
 
     public PomodoroTimer(UUID playerID, long taskTime, long pauseTime){
         this.player = playerID;
@@ -33,6 +34,7 @@ public class PomodoroTimer {
         this.shortPauseTime = pauseTime * 20;
         this.loopCounter = 0;
         this.tickable = true;
+        longPauseTime = OptionalLong.empty();
         currentTask = TaskType.ACTIVITY;
     }
 
@@ -43,7 +45,14 @@ public class PomodoroTimer {
         this.loopCounter = 0;
         this.timeLeft = activityTime;
         this.tickable = true;
+        longPauseTime = OptionalLong.empty();
         currentTask = TaskType.ACTIVITY;
+    }
+
+    public PomodoroTimer(UUID playerID, long taskTime, long pauseTime, long longPauseTime, int onWhichCycleLongPause){
+        this(playerID, taskTime, pauseTime);
+        this.longPauseTime = OptionalLong.of(longPauseTime);
+        this.loopIndexForLongPause = onWhichCycleLongPause;
     }
 
     /**
@@ -67,9 +76,9 @@ public class PomodoroTimer {
      */
     private void changeTask(){
         TaskType oldState = currentTask;
-        if(loopCounter == loopIndexForLongPause && currentTask == TaskType.ACTIVITY){
+        if(loopCounter == loopIndexForLongPause && currentTask == TaskType.ACTIVITY && longPauseTime.isPresent()){
             currentTask = TaskType.LONG_PAUSE;
-            timeLeft = longPauseTime;
+            timeLeft = longPauseTime.getAsLong();
         }
         else if(currentTask == TaskType.SHORT_PAUSE || currentTask == TaskType.LONG_PAUSE){
             currentTask = TaskType.ACTIVITY;
@@ -103,11 +112,15 @@ public class PomodoroTimer {
         tickable = b;
     }
 
+    public TaskType getCurrentTask(){
+        return currentTask;
+    }
+
     /**
      * get the current state
      * @return true if it's running a task, false otherwise
      */
-    public boolean isTaskActive(){
+    public boolean isTaskActivity(){
         return currentTask == TaskType.ACTIVITY;
     }
 
