@@ -57,12 +57,10 @@ public class PomodoroTimer {
 
     /**
      * ticks a timer and notifies updates
-     * @param server the server to send notifications
      */
-    public void tick(MinecraftServer server){
+    public void tick(){
         timeLeft--;
         if(timeLeft<= 0){
-            notifyTaskEnd(server);
             changeTask();
         }
     }

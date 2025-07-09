@@ -52,7 +52,7 @@ public class TimerManager {
 
     public static void tick(MinecraftServer server){
         for(PomodoroTimer timer : timers){
-            if(timer.isTickable()) timer.tick(server);
+            if(timer.isTickable()) timer.tick();
         }
     }
 
@@ -72,7 +72,7 @@ public class TimerManager {
      */
     public static boolean taskActive(UUID player){
         for(PomodoroTimer timer : timers){
-            if(timer.getPlayer() == player && timer.isTickable() && timer.isTaskActive()){
+            if(timer.getPlayer() == player && timer.isTickable() && timer.isTaskActivity()){
                 return true;
             }
         }
