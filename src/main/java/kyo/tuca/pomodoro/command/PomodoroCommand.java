@@ -2,6 +2,7 @@ package kyo.tuca.pomodoro.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
+import kyo.tuca.pomodoro.timer.PomodoroTimer;
 import kyo.tuca.pomodoro.timer.TimerManager;
 import kyo.tuca.pomodoro.util.DurationArgumentType;
 import kyo.tuca.pomodoro.util.TimerOperationStatus;
@@ -54,9 +55,11 @@ public class PomodoroCommand {
             context.getSource().sendFeedback(() -> Text.literal("Command not valid, player not found"), false);
             return -1;
         }
-        notifyStart(TimerManager.addTimer(player.getUuid(),
+        notifyStart(TimerManager.addTimer(new PomodoroTimer(
+                player.getUuid(),
                 context.getArgument("task time", Duration.class).getSeconds(),
-                context.getArgument("pause time", Duration.class).getSeconds()), context);
+                context.getArgument("pause time", Duration.class).getSeconds())), context
+        );
         return 0;
     }
 

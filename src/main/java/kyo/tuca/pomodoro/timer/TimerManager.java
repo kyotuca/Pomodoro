@@ -15,8 +15,8 @@ public class TimerManager {
     private static final List<PomodoroTimer> timers = new ArrayList<>();
     private static boolean hasAnyTimer = false;
 
-    public static TimerOperationStatus addTimer(UUID playerID, long taskLength, long pauseLength){
-        if(timers.stream().anyMatch(timer -> playerID == timer.getPlayer())){
+    public static TimerOperationStatus addTimer(PomodoroTimer newTimer){
+        if(timers.stream().anyMatch(timer -> newTimer.getPlayer() == timer.getPlayer())){
             //TODO  "you already have a timer running"
             return TimerOperationStatus.TIMER_EXISTS;
         }
@@ -24,7 +24,7 @@ public class TimerManager {
             hasAnyTimer = true;
             cleanSub();
         }
-        timers.add(new PomodoroTimer(playerID, taskLength, pauseLength));
+        timers.add(newTimer);
         return TimerOperationStatus.OK;
     }
 
