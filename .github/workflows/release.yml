@@ -46,6 +46,8 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
           body: ${{ steps.changelog.outputs.clean_changelog }}
+          files: |
+            build/libs/*.jar
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
