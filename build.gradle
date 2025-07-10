@@ -57,6 +57,17 @@ sourceSets {
     }
 }
 
+sourceSets {
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+        resources {
+            srcDirs = ['src/test/resources']
+        }
+    }
+}
+
 processResources {
     inputs.property "version", project.version
     inputs.property "minecraft_version", project.minecraft_version
