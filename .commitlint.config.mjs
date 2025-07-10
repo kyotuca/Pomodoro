@@ -14,7 +14,6 @@ export default {
                 'build'
             ]
         ],
-        'scope-empty': [2, 'never'],
         'subject-case': [2, 'never', ['start-case', 'pascal-case', 'upper-case']],
         'header-max-length': [2, 'always', 100]
     }
