@@ -1,7 +1,9 @@
 package kyo.tuca.pomodoro.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import kyo.tuca.pomodoro.timer.PomodoroTimer;
 import kyo.tuca.pomodoro.timer.TimerManager;
 import kyo.tuca.pomodoro.util.DurationArgumentType;
 import kyo.tuca.pomodoro.util.TimerOperationStatus;
@@ -33,7 +35,15 @@ public class PomodoroCommand {
                                 .executes(PomodoroCommand::defaultStart))
                         .then(CommandManager.argument("task time", new DurationArgumentType())
                                 .then(CommandManager.argument("pause time", new DurationArgumentType())
-                                        .executes(PomodoroCommand::startTimer))));
+                                        .executes(PomodoroCommand::startTimer)
+                                        .then(CommandManager.argument("long pause time", new DurationArgumentType())
+                                                .then(CommandManager.argument("pause cycle", IntegerArgumentType.integer())
+                                                        .executes(PomodoroCommand::startWithLongPause)
+                                                )
+                                        )
+                                )
+                        )
+        );
         LOGGER.log(Level.INFO, "\"pomodoro\" command registered");
 
     }
@@ -54,19 +64,37 @@ public class PomodoroCommand {
             context.getSource().sendFeedback(() -> Text.literal("Command not valid, player not found"), false);
             return -1;
         }
-        notifyStart(TimerManager.addTimer(player.getUuid(),
+        notifyStart(TimerManager.addTimer(new PomodoroTimer(
+                player.getUuid(),
                 context.getArgument("task time", Duration.class).getSeconds(),
-                context.getArgument("pause time", Duration.class).getSeconds()), context);
+                context.getArgument("pause time", Duration.class).getSeconds())), context
+        );
         return 0;
     }
 
-    public  static int stopTimer(CommandContext<ServerCommandSource> context){
+    public static int stopTimer(CommandContext<ServerCommandSource> context){
         ServerPlayerEntity player = context.getSource().getPlayer();
         if(player == null) {
             context.getSource().sendFeedback(() -> Text.literal("Command not valid, player not found"), false);
             return -1;
         }
         TimerManager.removeTimer(player.getUuid());
+        return 0;
+    }
+
+    public static int startWithLongPause(CommandContext<ServerCommandSource> context){
+        ServerPlayerEntity player = context.getSource().getPlayer();
+        if(player == null){
+            context.getSource().sendFeedback(() -> Text.literal("Command not valid, player not found"), false);
+            return -1;
+        }
+        TimerManager.addTimer(new PomodoroTimer(
+                player.getUuid(),
+                context.getArgument("task time", Duration.class).getSeconds(),
+                context.getArgument("pause time", Duration.class).getSeconds(),
+                context.getArgument("long pause time", Duration.class).getSeconds(),
+                IntegerArgumentType.getInteger(context, "pause cycle")
+                ));
         return 0;
     }
 

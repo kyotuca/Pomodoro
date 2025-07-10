@@ -8,7 +8,7 @@ The mod is currently heavily WIP and things could change or be removed.
 - [ ] translations
 - [ ] ...
 ## Installation
-The jar is available on Modrinth and GitHub, currently only supports [fabric loader](https://fabricmc.net/)
+The jar is available on Modrinth and GitHub, currently only supports [fabric](https://fabricmc.net/)
 
 ## Contribute
 You are free to contribute with issues and pull requests
